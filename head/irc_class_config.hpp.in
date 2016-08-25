@@ -1,0 +1,13 @@
+#ifndef IRC_CLASS_CONFIG_HPP
+#define IRC_CLASS_CONFIG_HPP
+
+const int VERSION1 = @major_version@;
+const int VERSION2 = @minor_version@;
+const int VERSION3 = @revision_version@;
+const char install_prefix[] = "@CMAKE_INSTALL_PREFIX@";
+
+#define PACKAGE "@PROJECT_NAME@"
+
+#cmakedefine01 DEBUG
+
+#endif //BOOK_MANAGE_CONFIG_HPP

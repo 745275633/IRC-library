@@ -1,0 +1,12 @@
+function(apt_get pkg)
+    message(STATUS "Installing package ${pkg}")
+
+    execute_process(COMMAND sudo apt-get install -y ${pkg} RESULT_VARIABLE install_failed OUTPUT_QUIET)
+    if(install_failed)
+        message(SEND_ERROR "${pkg} install failed")
+        set(INSTALL_FILE_FAILED 1 PARENT_SCOPE)
+        return()
+    else(install_failed)
+        message(STATUS "${pkg} install succeeded")
+    endif(install_failed)
+endfunction(apt_get pkg)
