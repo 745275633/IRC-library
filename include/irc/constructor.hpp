@@ -7,7 +7,7 @@
 #ifndef DA_IRC_CONSTRUCTOR_HPP
 #define DA_IRC_CONSTRUCTOR_HPP
 
-#include <irc/irc.hpp>
+#include <irc/main.hpp>
 #include <boost/make_shared.hpp>
 
 namespace DA
@@ -20,7 +20,7 @@ irc::irc()
 
 irc::~irc()
 {
-	send("QUIT");
+	quit();
 }
 
 irc::irc(std::string name, std::string port)
@@ -28,7 +28,7 @@ irc::irc(std::string name, std::string port)
 	sock = boost::make_shared<boost::asio::ip::tcp::socket>(ioser);
 	boost::system::error_code ec;
 	resolv_connec_v2(name, port, ec);
-	boost::asio::detail::throw_error(ec, "DA::irc::irc");
+	DA_IRC_THROW_ERROR(ec);
 }
 
 }

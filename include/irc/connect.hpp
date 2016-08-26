@@ -1,5 +1,5 @@
 /*!
- * \file src/connect.hpp
+ * \file irc/connect.hpp
  * \brief 这个文件是连接相关的内容的实现。
  * \author 吞噬黑洞的数据（745275633）
  */
@@ -7,7 +7,7 @@
 #ifndef DA_IRC_CONNECT_HPP
 #define DA_IRC_CONNECT_HPP
 
-#include <irc/irc.hpp>
+#include <irc/main.hpp>
 
 namespace DA
 {
@@ -26,10 +26,8 @@ void irc::resolv_connect(std::string name, std::string port)
 		sock->connect(*iter, ec);
 	}
 
-	if (ec)
-	{
-		boost::asio::detail::throw_error(ec, "DA::irc::resolv_connect");
-	}
+	DA_IRC_THROW_ERROR(ec);
+	is_connect = trun;
 }
 
 boost::system::error_code irc::resolv_connect(std::string name, std::string port,
@@ -51,6 +49,10 @@ boost::system::error_code irc::resolv_connect(std::string name, std::string port
 	{
 		ec = er;
 	}
+	else
+	{
+		is_connect = trun;
+	}
 
 	return ec;
 }
@@ -65,13 +67,18 @@ void irc::resolv_connec_v2(std::string name, std::string port)
 {
 	boost::system::error_code ec;
 	connect(*sock, get_iterator(name, port), ec);
-	boost::asio::detail::throw_error(ec, "DA::irc::resolv_connect_v2");
+	DA_IRC_THROW_ERROR(ec);
+	is_connect = trun;
 }
 
 boost::system::error_code irc::resolv_connec_v2(std::string name, std::string port,
         boost::system::error_code &ec)
 {
 	connect(*sock, get_iterator(name, port), ec);
+	if(!ec)
+	{
+		is_connect = trun;
+	}
 	return ec;
 }
 

@@ -11,7 +11,7 @@
 #include <boost/asio.hpp>
 #include <boost/system/error_code.hpp>
 #include <string>
-#include <irc/irc.hpp>
+#include <irc/main.hpp>
 #include <irc/connect.hpp>
 #include <irc/version.hpp>
 #include <irc/constructor.hpp>

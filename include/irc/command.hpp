@@ -7,9 +7,50 @@
 #ifndef DA_IRC_COMMAND_HPP
 #define DA_IRC_COMMAND_HPP
 
+#include <irc/main.hpp>
+
 namespace DA
 {
+std::string irc::quit()
+{
+	boost::system::error_code ec;
+	std::string a = send("QUIT", ec);
+	DA_IRC_THROW_ERROR(ec);
+	return a;
+}
 
+std::string irc::quit(boost::system::error_code &ec)
+{
+	return send("QUIT", ec);
+}
+
+std::string irc::user(std::string username, std::string hostname, std::string servername,
+                      std::string realname)
+{
+	boost::system::error_code ec;
+	std::string a = send("USER " + username + " " + hostname + " " + servername + " :" + realname, ec);
+	DA_IRC_THROW_ERROR(ec);
+	return a;
+}
+
+std::string irc::user(std::string username, std::string hostname, std::string servername,
+                      std::string realname, boost::system::error_code &ec)
+{
+	return send("USER " + username + " " + hostname + " " + servername + " :" + realname, ec);
+}
+
+std::string nick(std::string nickname, bool &error)
+{
+	boost::system::error_code ec;
+	std::string a = send("NICK " + nickname, ec);
+	DA_IRC_THROW_ERROR(ec);
+	return a;
+}
+
+std::string nick(std::string nickname, bool &error, boost::system::error_code &ec)
+{
+	return send("NICK " + nickname, ec);
+}
 }
 
 #endif

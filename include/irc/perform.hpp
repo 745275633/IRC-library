@@ -1,5 +1,5 @@
 /*!
- * \file src/perform.hpp
+ * \file irc/perform.hpp
  * \brief 这个文件是操作/执行相关的内容的实现。
  * \author 吞噬黑洞的数据（745275633）
  */
@@ -7,24 +7,87 @@
 #ifndef DA_IRC_PERFORM_HPP
 #define DA_IRC_PERFORM_HPP
 
-#include <irc/irc.hpp>
+#include <irc/main.hpp>
 
 namespace DA
 {
-	void irc::send(std::string message)
+std::string irc::send(std::string message)
+{
+	if(is_connect)
 	{
-		boost::system::error_code ec;
-		boost::mutex::scoped_lock lock(mu);
-		sock->write_some(boost::asio::buffer(message + "\r\n"), ec);
-		boost::asio::detail::throw_error(ec, "DA::irc::send");
+	boost::system::error_code ec;
+	sock->write_some(boost::asio::buffer(message + "\r\n"), ec);
+	DA_IRC_THROW_ERROR(ec);
+	return (message + "\n");
 	}
+	else
+	{
+	return "";
+	}
+}
+
+std::string irc::send(std::string message, boost::system::error_code &ec)
+{
+	if(is_connect)
+	{
+	sock->write_some(boost::asio::buffer(message + "\r\n"), ec);
+	return (message + "\n");
+	else
+	{
+		return "";
+	}
+}
+
+
+
+std::string irc::receive()
+{
+	boost::system::error_code ec
+	char tmp[520] = {0};
+	sock->read_some(buffer(tmp, 512), ec);
+	string msg = tmp;
+	CRLF2LF(msg);
 	
-	boost::system::error_code irc::send(std::string message, boost::system::error_code &ec)
-	{
-		boost::mutex::scoped_lock lock(mu);
-		sock->write_some(boost::asio::buffer(message + "\r\n"), ec);
-		return ec;
-	}
+	if (ec)
+		DA_IRC_THROW_ERROR(ec);
+	return msg;
+}
+
+std::string irc::receive(boost::system::error_code &ec)
+{
+	char tmp[520] = {0};
+	sock->read_some(buffer(tmp, 512), ec);
+	string msg = tmp;
+	CRLF2LF(msg);
+	
+	ec = er;
+	return msg;
+}
+
+std::string irc::receive(std::string &message)
+{
+	boost::system::error_code ec
+	char tmp[520] = {0};
+	sock->read_some(buffer(tmp, 512), ec);
+	string message = tmp;
+	CRLF2LF(message);
+	
+	if (ec)
+		DA_IRC_THROW_ERROR(ec);
+	return message;
+}
+
+std::string irc::receive(std::string &message, boost::system::error_code &ec)
+{
+	char tmp[520] = {0};
+	sock->read_some(buffer(tmp, 512), ec);
+	string message = tmp;
+	CRLF2LF(message);
+	
+	ec = er;
+	return message;
+}
+
 }
 
 #endif

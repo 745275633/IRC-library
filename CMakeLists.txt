@@ -28,5 +28,5 @@ include_directories(${PROJECT_SOURCE_DIR}/include SYSTEM)
 include_directories(${PROJECT_SOURCE_DIR}/head)
 #link_directories(${PROJECT_SOURCE_DIR}/lib)
 add_subdirectory(test)
-install(FILES ${PROJECT_SOURCE_DIR}/bin/${PROJECT_NAME} DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+install(DIRECTORY include/ DESTINATION include)
 

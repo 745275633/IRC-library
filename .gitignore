@@ -37,7 +37,11 @@ bin/
 !.git/
 !.gitignore
 irc_class_config.hpp
+version.hpp
 install_manifest.txt
 cscope.*
 tags
 locale/
+html/
+man/
+rtf/
