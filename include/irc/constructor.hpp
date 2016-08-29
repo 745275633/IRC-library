@@ -17,12 +17,13 @@ namespace DA
 irc::irc()
 {
 	sock = boost::make_shared<boost::asio::ip::tcp::socket>(ioser);
-	std::cout << makeinfo << endl;
+	version = boost::make_shared<version_b>();
+	std::cout << version->makeinfo << std::endl;
 }
 
 irc::~irc()
 {
-	std::cout << makeinfo << endl;
+	std::cout << version->makeinfo << std::endl;
 	quit();
 }
 

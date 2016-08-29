@@ -66,6 +66,13 @@ public:
 	 * \brief 是否已连接。
 	 */
 	bool is_connect = false;
+	
+	/**
+	 * \brief irc 库的版本信息。
+	 */
+	class version_b;
+	
+	boost::shared_ptr<version_b> version;
 
 	/**
 	 * \brief 这个缺省构造函数只进行初始化。
@@ -284,11 +291,6 @@ public:
 	irc(std::string name, std::string port, std::string username, std::string hostname,
 	    std::string servername, std::string realname, std::string channel, std::string key,
 	    boost::system::error_code &ec);
-
-	/**
-	 * \brief irc 库的版本信息。
-	 */
-	class version;
 
 	/**
 	 * \brief 已弃用，请使用 resolv_connec_v2
