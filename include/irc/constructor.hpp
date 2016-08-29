@@ -9,6 +9,7 @@
 
 #include <irc/main.hpp>
 #include <boost/make_shared.hpp>
+#include <iostream>
 
 namespace DA
 {
@@ -16,10 +17,12 @@ namespace DA
 irc::irc()
 {
 	sock = boost::make_shared<boost::asio::ip::tcp::socket>(ioser);
+	std::cout << makeinfo << endl;
 }
 
 irc::~irc()
 {
+	std::cout << makeinfo << endl;
 	quit();
 }
 

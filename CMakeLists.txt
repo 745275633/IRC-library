@@ -6,6 +6,7 @@ include(cmakeapt)
 set (major_version 0)
 set (minor_version 1)
 set (revision_version 0)
+file(READ build_times build_version)
 # debug和release的参数
 SET(CMAKE_CXX_FLAGS_DEBUG "--std=c++11 -O0 -Wall -g -ggdb ")
 SET(CMAKE_CXX_FLAGS_RELEASE "--std=c++11 -O3 -Wall")
