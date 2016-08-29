@@ -27,7 +27,7 @@ void irc::resolv_connect(std::string name, std::string port)
 	}
 
 	DA_IRC_THROW_ERROR(ec);
-	is_connect = trun;
+	is_connect = true;
 }
 
 boost::system::error_code irc::resolv_connect(std::string name, std::string port,
@@ -51,7 +51,7 @@ boost::system::error_code irc::resolv_connect(std::string name, std::string port
 	}
 	else
 	{
-		is_connect = trun;
+		is_connect = true;
 	}
 
 	return ec;
@@ -68,17 +68,19 @@ void irc::resolv_connec_v2(std::string name, std::string port)
 	boost::system::error_code ec;
 	connect(*sock, get_iterator(name, port), ec);
 	DA_IRC_THROW_ERROR(ec);
-	is_connect = trun;
+	is_connect = true;
 }
 
 boost::system::error_code irc::resolv_connec_v2(std::string name, std::string port,
         boost::system::error_code &ec)
 {
 	connect(*sock, get_iterator(name, port), ec);
-	if(!ec)
+
+	if (!ec)
 	{
-		is_connect = trun;
+		is_connect = true;
 	}
+
 	return ec;
 }
 

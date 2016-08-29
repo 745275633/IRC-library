@@ -13,81 +13,74 @@ namespace DA
 {
 std::string irc::send(std::string message)
 {
-	if(is_connect)
+	if (is_connect)
 	{
-	boost::system::error_code ec;
-	sock->write_some(boost::asio::buffer(message + "\r\n"), ec);
-	DA_IRC_THROW_ERROR(ec);
-	return (message + "\n");
+		boost::system::error_code ec;
+		sock->write_some(boost::asio::buffer(message + "\r\n"), ec);
+		DA_IRC_THROW_ERROR(ec);
+		return (message + "\n");
 	}
-	else
-	{
-	return "";
-	}
-}
-
-std::string irc::send(std::string message, boost::system::error_code &ec)
-{
-	if(is_connect)
-	{
-	sock->write_some(boost::asio::buffer(message + "\r\n"), ec);
-	return (message + "\n");
 	else
 	{
 		return "";
 	}
 }
 
-
+std::string irc::send(std::string message, boost::system::error_code &ec)
+{
+	if (is_connect)
+	{
+		sock->write_some(boost::asio::buffer(message + "\r\n"), ec);
+		return (message + "\n");
+	}
+	else
+	{
+		return "";
+	}
+}
 
 std::string irc::receive()
 {
-	boost::system::error_code ec
+	boost::system::error_code ec;
 	char tmp[520] = {0};
-	sock->read_some(buffer(tmp, 512), ec);
-	string msg = tmp;
+	sock->read_some(boost::asio::buffer(tmp, 512), ec);
+	std::string msg = tmp;
 	CRLF2LF(msg);
-	
+
 	if (ec)
 		DA_IRC_THROW_ERROR(ec);
+
 	return msg;
 }
-
 std::string irc::receive(boost::system::error_code &ec)
 {
 	char tmp[520] = {0};
-	sock->read_some(buffer(tmp, 512), ec);
-	string msg = tmp;
+	sock->read_some(boost::asio::buffer(tmp, 512), ec);
+	std::string msg = tmp;
 	CRLF2LF(msg);
-	
-	ec = er;
 	return msg;
 }
-
 std::string irc::receive(std::string &message)
 {
-	boost::system::error_code ec
+	boost::system::error_code ec;
 	char tmp[520] = {0};
-	sock->read_some(buffer(tmp, 512), ec);
-	string message = tmp;
+	sock->read_some(boost::asio::buffer(tmp, 512), ec);
+	std::string msg = tmp;
 	CRLF2LF(message);
-	
+
 	if (ec)
 		DA_IRC_THROW_ERROR(ec);
+
 	return message;
 }
-
 std::string irc::receive(std::string &message, boost::system::error_code &ec)
 {
 	char tmp[520] = {0};
-	sock->read_some(buffer(tmp, 512), ec);
-	string message = tmp;
+	sock->read_some(boost::asio::buffer(tmp, 512), ec);
+	std::string msg = tmp;
 	CRLF2LF(message);
-	
-	ec = er;
 	return message;
 }
-
 }
 
 #endif

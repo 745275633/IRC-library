@@ -31,8 +31,6 @@ protected:
 
 	boost::asio::io_service ioser;
 	boost::shared_ptr<boost::asio::ip::tcp::socket> sock;
-	
-	bool is_connect = false;
 
 	/**
 	 * \brief （这是 protected 的）此函数用于把网址转换给 boost::asio::ip::tcp::socket::connect 函数使用。
@@ -52,17 +50,23 @@ protected:
 	 * \endcode
 	 */
 	boost::asio::ip::tcp::resolver::iterator get_iterator(std::string name, std::string port);
-	
-	inline static void CRLF2LF(std::string & str)
+
+	inline static void CRLF2LF(std::string &str)
 	{
-		string::size_type pos;
-		while((pos = str.find("\r\n")) != string::npos)
+		std::string::size_type pos;
+
+		while ((pos = str.find("\r\n")) != std::string::npos)
 		{
-				str.replace(pos, 2, "\n");
+			str.replace(pos, 2, "\n");
 		}
-	} 
+	}
 
 public:
+	/**
+	 * \brief 是否已连接。
+	 */
+	bool is_connect = false;
+
 	/**
 	 * \brief 这个缺省构造函数只进行初始化。
 	 */
@@ -77,26 +81,50 @@ public:
 	 * \brief 初始化的同时还进行连接。
 	 *
 	 * \param name 服务器地址。
-	 * 
-	 * \param port 端口号，默认"6667"。
+	 *
+	 * \param port 端口号。
+	 *
+	 * \throws boost::system::system_error 抛出错误。
 	 *
 	 * \par Example
 	 * \code
-	 * boost::asio::io_service ioser;
-	 * DA::irc("irc.freenode.net");
+	 * DA::irc("irc.freenode.net", "6667");
 	 * \endcode
 	 */
-	irc(std::string name, std::string port = "6667");
-	
+	irc(std::string name, std::string port);
+
 	/**
-	 * \brief 初始化的同时还进行连接和发送 USER 指令
+	 * \brief 初始化的同时还进行连接。
+	 *
+	 * \param name 服务器地址。
+	 *
+	 * \param port 端口号。
+	 *
+	 * \param ec 表明发生了什么错误，如果有。
+	 *
+	 * \par Example
+	 * \code
+	 * boost::system::error_code ec;
+	 * DA::irc("irc.freenode.net", "6667", ec);
+	 * if (ec)
+	 * {
+	 *   // 一个错误发生
+	 * }
+	 * \endcode
+	 */
+	irc(std::string name, std::string port, boost::system::error_code &ec);
+
+	/**
+	 * \brief 初始化的同时还进行连接、发送 USER 指令、NICK 指令。
 	 *
 	 * USER指令是在连接开始建立后来详细说明用户的username，hostname，servername，realname的。USER指令也被server之间用来通信用来通告一个新的用户连接上了服务器，只有当client的USER和NICK指令抵达服务器后才完成了注册连接的步骤。
-	 * 一般情况下 hostname 和 servername 在服务器明确知道这是一个client发过来的USER指令的时候，他们都会被忽略
+	 * 一般情况下 hostname 和 servername 在服务器明确知道这是一个client发过来的USER指令的时候，他们都会被忽略。
 	 * 
+	 * NICK 命令是用来给予用户一个昵称或者修改之前的昵称。如果一个 NICK 信息到达了一台已经存在一个这个昵称的服务器上，就会发生 nickname 冲突。
+	 *
 	 * \param name 服务器地址。
-	 * 
-	 * \param port 端口号，默认"6667"。
+	 *
+	 * \param port 端口号。
 	 *
 	 * \param username 用户名(NICKname)。
 	 *
@@ -106,26 +134,22 @@ public:
 	 *
 	 * \param realname 真名。
 	 *
-	 * \throws boost::system::system_error 抛出错误.
-	 * 
-	 * \par Example
-	 * \code
-	 * boost::asio::io_service ioser;
-	 * DA::irc(ios);
-	 * \endcode
+	 * \throws boost::system::system_error 抛出错误。
 	 */
-	irc(std::string name, std::string port = "6667", std::string username, std::string hostname, std::string servername,
-		std::string realname,);
-	
+	irc(std::string name, std::string port, std::string username, std::string hostname,
+	    std::string servername, std::string realname);
+
 	/**
-	 * \brief 初始化的同时还进行连接和发送 USER 指令
+	 * \brief 初始化的同时还进行连接、发送 USER 指令、NICK 指令。
 	 *
 	 * USER指令是在连接开始建立后来详细说明用户的username，hostname，servername，realname的。USER指令也被server之间用来通信用来通告一个新的用户连接上了服务器，只有当client的USER和NICK指令抵达服务器后才完成了注册连接的步骤。
-	 * 一般情况下 hostname 和 servername 在服务器明确知道这是一个client发过来的USER指令的时候，他们都会被忽略
+	 * 一般情况下 hostname 和 servername 在服务器明确知道这是一个client发过来的USER指令的时候，他们都会被忽略。
 	 * 
+	 * NICK 命令是用来给予用户一个昵称或者修改之前的昵称。如果一个 NICK 信息到达了一台已经存在一个这个昵称的服务器上，就会发生 nickname 冲突。
+	 *
 	 * \param name 服务器地址。
-	 * 
-	 * \param port 端口号，默认"6667"。
+	 *
+	 * \param port 端口号。
 	 *
 	 * \param username 用户名(NICKname)。
 	 *
@@ -135,16 +159,131 @@ public:
 	 *
 	 * \param realname 真名。
 	 *
-	 * \param ec 表明发生了什么错误，如果有
-	 * 
-	 * \par Example
-	 * \code
-	 * boost::asio::io_service ioser;
-	 * DA::irc(ios);
-	 * \endcode
+	 * \param ec 表明发生了什么错误，如果有。
 	 */
-	irc(std::string name, std::string port = "6667", std::string username, std::string hostname, std::string servername,
-		std::string realname, boost::system::error_code &ec);
+	irc(std::string name, std::string port, std::string username, std::string hostname,
+	    std::string servername, std::string realname, boost::system::error_code &ec);
+
+	/**
+	 * \brief 初始化的同时还进行连接、发送 USER 指令、NICK 指令、JOIN指令。
+	 *
+	 * USER指令是在连接开始建立后来详细说明用户的username，hostname，servername，realname的。USER指令也被server之间用来通信用来通告一个新的用户连接上了服务器，只有当client的USER和NICK指令抵达服务器后才完成了注册连接的步骤。
+	 * 一般情况下 hostname 和 servername 在服务器明确知道这是一个client发过来的USER指令的时候，他们都会被忽略。
+	 * 
+	 * NICK 命令是用来给予用户一个昵称或者修改之前的昵称。如果一个 NICK 信息到达了一台已经存在一个这个昵称的服务器上，就会发生 nickname 冲突。
+	 * 
+	 * JOIN指令是用来收听一个指定的频道时使用的。
+	 *
+	 * \param name 服务器地址。
+	 *
+	 * \param port 端口号。
+	 *
+	 * \param username 用户名(NICKname)。
+	 *
+	 * \param hostname 主机名。
+	 *
+	 * \param servername 服务器地址。
+	 *
+	 * \param realname 真名。
+	 *
+	 * \param channel 频道名。
+	 *
+	 * \throws boost::system::system_error 抛出错误。
+	 */
+	irc(std::string name, std::string port, std::string username, std::string hostname,
+	    std::string servername, std::string realname, std::string channel);
+
+	/**
+	 * \brief 初始化的同时还进行连接、发送 USER 指令、NICK 指令、JOIN指令。
+	 *
+	 * USER指令是在连接开始建立后来详细说明用户的username，hostname，servername，realname的。USER指令也被server之间用来通信用来通告一个新的用户连接上了服务器，只有当client的USER和NICK指令抵达服务器后才完成了注册连接的步骤。
+	 * 一般情况下 hostname 和 servername 在服务器明确知道这是一个client发过来的USER指令的时候，他们都会被忽略。
+	 * 
+	 * NICK 命令是用来给予用户一个昵称或者修改之前的昵称。如果一个 NICK 信息到达了一台已经存在一个这个昵称的服务器上，就会发生 nickname 冲突。
+	 * 
+	 * JOIN指令是用来收听一个指定的频道时使用的。
+	 *
+	 * \param name 服务器地址。
+	 *
+	 * \param port 端口号。
+	 *
+	 * \param username 用户名(NICKname)。
+	 *
+	 * \param hostname 主机名。
+	 *
+	 * \param servername 服务器地址。
+	 *
+	 * \param realname 真名。
+	 *
+	 * \param channel 频道名。
+	 *
+	 * \param ec 表明发生了什么错误，如果有。
+	 */
+	irc(std::string name, std::string port, std::string username, std::string hostname,
+	    std::string servername, std::string realname, std::string channel, boost::system::error_code &ec);
+
+	/**
+	 * \brief 初始化的同时还进行连接、发送 USER 指令、NICK 指令、JOIN指令。
+	 *
+	 * USER指令是在连接开始建立后来详细说明用户的username，hostname，servername，realname的。USER指令也被server之间用来通信用来通告一个新的用户连接上了服务器，只有当client的USER和NICK指令抵达服务器后才完成了注册连接的步骤。
+	 * 一般情况下 hostname 和 servername 在服务器明确知道这是一个client发过来的USER指令的时候，他们都会被忽略。
+	 * 
+	 * NICK 命令是用来给予用户一个昵称或者修改之前的昵称。如果一个 NICK 信息到达了一台已经存在一个这个昵称的服务器上，就会发生 nickname 冲突。
+	 * 
+	 * JOIN指令是用来收听一个指定的频道时使用的。
+	 *
+	 * \param name 服务器地址。
+	 *
+	 * \param port 端口号。
+	 *
+	 * \param username 用户名(NICKname)。
+	 *
+	 * \param hostname 主机名。
+	 *
+	 * \param servername 服务器地址。
+	 *
+	 * \param realname 真名。
+	 *
+	 * \param channel 频道名。
+	 *
+	 * \param key 频道密码。
+	 *
+	 * \throws boost::system::system_error 抛出错误。
+	 */
+	irc(std::string name, std::string port, std::string username, std::string hostname,
+	    std::string servername, std::string realname, std::string channel, std::string key);
+
+	/**
+	 * \brief 初始化的同时还进行连接、发送 USER 指令、NICK 指令、JOIN指令。
+	 *
+	 * USER指令是在连接开始建立后来详细说明用户的username，hostname，servername，realname的。USER指令也被server之间用来通信用来通告一个新的用户连接上了服务器，只有当client的USER和NICK指令抵达服务器后才完成了注册连接的步骤。
+	 * 一般情况下 hostname 和 servername 在服务器明确知道这是一个client发过来的USER指令的时候，他们都会被忽略。
+	 * 
+	 * NICK 命令是用来给予用户一个昵称或者修改之前的昵称。如果一个 NICK 信息到达了一台已经存在一个这个昵称的服务器上，就会发生 nickname 冲突。
+	 * 
+	 * JOIN指令是用来收听一个指定的频道时使用的。
+	 *
+	 * \param name 服务器地址。
+	 *
+	 * \param port 端口号。
+	 *
+	 * \param username 用户名(NICKname)。
+	 *
+	 * \param hostname 主机名。
+	 *
+	 * \param servername 服务器地址。
+	 *
+	 * \param realname 真名。
+	 *
+	 * \param channel 频道名。
+	 *
+	 * \param key 频道密码。
+	 *
+	 * \param ec 表明发生了什么错误，如果有。
+	 */
+	irc(std::string name, std::string port, std::string username, std::string hostname,
+	    std::string servername, std::string realname, std::string channel, std::string key,
+	    boost::system::error_code &ec);
 
 	/**
 	 * \brief irc 库的版本信息。
@@ -162,7 +301,7 @@ public:
 	 *
 	 * \param port 端口号 string 类型，可以是确定的数字（如：“6667”），也可以是 boost::asio::ip::tcp::resolver::query 中可以使用的文本。
 	 *
-	 * \throws boost::system::system_error 抛出错误.
+	 * \throws boost::system::system_error 抛出错误。
 	 *
 	 * \par Example
 	 * \code
@@ -206,7 +345,7 @@ public:
 	 *
 	 * \param port 端口号 string 类型，可以是确定的数字（如：“6667”），也可以是 boost::asio::ip::tcp::resolver::query 中可以使用的文本。
 	 *
-	 * \throws boost::system::system_error 抛出错误.
+	 * \throws boost::system::system_error 抛出错误。
 	 *
 	 * \par Example
 	 * \code
@@ -244,7 +383,7 @@ public:
 	 *
 	 * \param message 命令内容， string 类型。
 	 *
-	 * \throws boost::system::system_error 抛出错误.
+	 * \throws boost::system::system_error 抛出错误。
 	 *
 	 * \return 返回发送的命令。
 	 *
@@ -275,11 +414,11 @@ public:
 	 * \endcode
 	 */
 	std::string send(std::string message, boost::system::error_code &ec);
-	
+
 	/**
 	 * \brief 此函数用于接收服务器发送的信息。
 	 *
-	 * \throws boost::system::system_error 抛出错误.
+	 * \throws boost::system::system_error 抛出错误。
 	 *
 	 * \return 返回接收的信息内容。
 	 *
@@ -289,7 +428,7 @@ public:
 	 * \endcode
 	 */
 	std::string receive();
-	
+
 	/**
 	 * \brief 此函数用于接收服务器发送的信息。
 	 *
@@ -308,13 +447,13 @@ public:
 	 * \endcode
 	 */
 	std::string receive(boost::system::error_code &ec);
-	
+
 	/**
 	 * \brief 此函数用于接收服务器发送的信息。
 	 *
 	 * \param message 接收的信息内容， string & 类型。
 	 *
-	 * \throws boost::system::system_error 抛出错误.
+	 * \throws boost::system::system_error 抛出错误。
 	 *
 	 * \return 返回接收的信息内容。
 	 *
@@ -325,7 +464,7 @@ public:
 	 * \endcode
 	 */
 	std::string receive(std::string &message);
-	
+
 	/**
 	 * \brief 此函数用于接收服务器发送的信息。
 	 *
@@ -351,8 +490,7 @@ public:
 	/**
 	 * \brief 发送 QUIT 指令。
 	 *
-	 * USER指令是在连接开始建立后来详细说明用户的username，hostname，servername，realname的。USER指令也被server之间用来通信用来通告一个新的用户连接上了服务器，只有当client的USER和NICK指令抵达服务器后才* 完成了注册连接的步骤。
-	 * 一般情况下hostname和servername在服务器明确知道这是一个client发过来的USER指令的时候，他们都会被忽略
+	 * 一个客户端的会话可以通过一个 QUIT 指令来终结。服务器必须在收到 client 的 QUIT 指令后关闭这个 client 的连接。
 	 *
 	 * \param ec 表明发生了什么错误，如果有。
 	 *
@@ -363,10 +501,9 @@ public:
 	/**
 	 * \brief 发送 QUIT 指令。
 	 *
-	 * USER指令是在连接开始建立后来详细说明用户的username，hostname，servername，realname的。USER指令也被server之间用来通信用来通告一个新的用户连接上了服务器，只有当client的USER和NICK指令抵达服务器后才* 完成了注册连接的步骤。
-	 * 一般情况下hostname和servername在服务器明确知道这是一个client发过来的USER指令的时候，他们都会被忽略
+	 * 一个客户端的会话可以通过一个 QUIT 指令来终结。服务器必须在收到 client 的 QUIT 指令后关闭这个 client 的连接。
 	 *
-	 * \throws boost::system::system_error 抛出错误.
+	 * \throws boost::system::system_error 抛出错误。
 	 *
 	 * \return 返回发送的命令。
 	 */
@@ -376,7 +513,7 @@ public:
 	 * \brief 发送 USER 指令。
 	 *
 	 * USER指令是在连接开始建立后来详细说明用户的username，hostname，servername，realname的。USER指令也被server之间用来通信用来通告一个新的用户连接上了服务器，只有当client的USER和NICK指令抵达服务器后才* 完成了注册连接的步骤。
-	 * 一般情况下hostname和servername在服务器明确知道这是一个client发过来的USER指令的时候，他们都会被忽略
+	 * 一般情况下hostname和servername在服务器明确知道这是一个client发过来的USER指令的时候，他们都会被忽略。
 	 *
 	 * \param username 用户名(NICKname)。
 	 *
@@ -386,7 +523,7 @@ public:
 	 *
 	 * \param realname 真名。
 	 *
-	 * \throws boost::system::system_error 抛出错误.
+	 * \throws boost::system::system_error 抛出错误。
 	 *
 	 * \return 返回发送的命令。
 	 */
@@ -397,7 +534,7 @@ public:
 	 * \brief 发送 USER 指令。
 	 *
 	 * USER指令是在连接开始建立后来详细说明用户的username，hostname，servername，realname的。USER指令也被server之间用来通信用来通告一个新的用户连接上了服务器，只有当client的USER和NICK指令抵达服务器后才* 完成了注册连接的步骤。
-	 * 一般情况下hostname和servername在服务器明确知道这是一个client发过来的USER指令的时候，他们都会被忽略
+	 * 一般情况下hostname和servername在服务器明确知道这是一个client发过来的USER指令的时候，他们都会被忽略。
 	 *
 	 * \param username 用户名(NICKname)。
 	 *
@@ -413,34 +550,88 @@ public:
 	 */
 	std::string user(std::string username, std::string hostname, std::string servername,
 	                 std::string realname, boost::system::error_code &ec);
-	
+
 	/**
 	 * \brief 发送 NICK 指令。
 	 *
 	 * NICK 命令是用来给予用户一个昵称或者修改之前的昵称。如果一个 NICK 信息到达了一台已经存在一个这个昵称的服务器上，就会发生 nickname 冲突。
-	 * 
 	 *
-	 * \param nickname nickname
+	 * \param nickname nickname。
 	 *
-	 * \throws boost::system::system_error 抛出错误.
+	 * \throws boost::system::system_error 抛出错误。
 	 *
 	 * \return 返回发送的命令。
 	 */
 	std::string nick(std::string nickname);
-	
+
 	/**
 	 * \brief 发送 NICK 指令。
 	 *
 	 * NICK 命令是用来给予用户一个昵称或者修改之前的昵称。如果一个 NICK 信息到达了一台已经存在一个这个昵称的服务器上，就会发生 nickname 冲突。
-	 * 
 	 *
-	 * \param nickname nickname
+	 * \param nickname nickname。
 	 *
 	 * \param ec 表明发生了什么错误，如果有。
 	 *
 	 * \return 返回发送的命令。
 	 */
 	std::string nick(std::string nickname, boost::system::error_code &ec);
+
+	/**
+	 * \brief 发送 JOIN 指令。
+	 *
+	 * JOIN指令是用来收听一个指定的频道时使用的。
+	 *
+	 * \param channel 频道名。
+	 *
+	 * \throws boost::system::system_error 抛出错误。
+	 *
+	 * \return 返回发送的命令。
+	 */
+	std::string join(std::string channel);
+
+	/**
+	 * \brief 发送 JOIN 指令。
+	 *
+	 * JOIN指令是用来收听一个指定的频道时使用的。
+	 *
+	 * \param channel 频道名。
+	 * 
+	 * \param ec 表明发生了什么错误，如果有。
+	 *
+	 * \return 返回发送的命令。
+	 */
+	std::string join(std::string channel, boost::system::error_code &ec);
+
+	/**
+	 * \brief 发送 JOIN 指令。
+	 *
+	 * JOIN指令是用来收听一个指定的频道时使用的。
+	 *
+	 * \param channel 频道名（包括‘#’）。
+	 *
+	 * \param key 频道密码。
+	 *
+	 * \throws boost::system::system_error 抛出错误。
+	 *
+	 * \return 返回发送的命令。
+	 */
+	std::string join(std::string channel, std::string key);
+
+	/**
+	 * \brief 发送 JOIN 指令。
+	 *
+	 * JOIN指令是用来收听一个指定的频道时使用的。
+	 *
+	 * \param channel 频道名（包括‘#’）。
+	 *
+	 * \param key 频道密码。
+	 *
+	 * \param ec 表明发生了什么错误，如果有。
+	 *
+	 * \return 返回发送的命令。
+	 */
+	std::string join(std::string channel, std::string key, boost::system::error_code &ec);
 
 };
 }

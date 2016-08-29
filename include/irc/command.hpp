@@ -39,7 +39,7 @@ std::string irc::user(std::string username, std::string hostname, std::string se
 	return send("USER " + username + " " + hostname + " " + servername + " :" + realname, ec);
 }
 
-std::string nick(std::string nickname, bool &error)
+std::string irc::nick(std::string nickname)
 {
 	boost::system::error_code ec;
 	std::string a = send("NICK " + nickname, ec);
@@ -47,10 +47,37 @@ std::string nick(std::string nickname, bool &error)
 	return a;
 }
 
-std::string nick(std::string nickname, bool &error, boost::system::error_code &ec)
+std::string irc::nick(std::string nickname, boost::system::error_code &ec)
 {
 	return send("NICK " + nickname, ec);
 }
+
+std::string irc::join(std::string channel)
+{
+	boost::system::error_code ec;
+	std::string a = send("JOIN " + channel, ec);
+	DA_IRC_THROW_ERROR(ec);
+	return a;
+}
+
+std::string irc::join(std::string channel, boost::system::error_code &ec)
+{
+	return send("JOIN " + channel, ec);
+}
+
+std::string irc::join(std::string channel, std::string key)
+{
+	boost::system::error_code ec;
+	std::string a = send("JOIN " + channel + " " + key, ec);
+	DA_IRC_THROW_ERROR(ec);
+	return a;
+}
+
+std::string irc::join(std::string channel, std::string key, boost::system::error_code &ec)
+{
+	return send("JOIN " + channel + " " + key, ec);
+}
+
 }
 
 #endif

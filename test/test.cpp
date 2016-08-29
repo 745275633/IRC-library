@@ -2,6 +2,7 @@
 #include <iostream>
 
 int main()
+
 try
 {
 	DA::irc bot;
