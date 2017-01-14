@@ -55,7 +55,7 @@ std::string irc::receive(std::string &message)
 	boost::system::error_code ec;
 	char tmp[520] = {0};
 	sock->read_some(boost::asio::buffer(tmp, 512), ec);
-	std::string msg = tmp;
+	message = tmp;
 	CRLF2LF(message);
 
 	if (ec)
@@ -67,7 +67,7 @@ std::string irc::receive(std::string &message, boost::system::error_code &ec)
 {
 	char tmp[520] = {0};
 	sock->read_some(boost::asio::buffer(tmp, 512), ec);
-	std::string msg = tmp;
+	message = tmp;
 	CRLF2LF(message);
 	return message;
 }

@@ -18,10 +18,10 @@ public:
 	const int MINOR_VERSION = 1;
 	const int VERSION_REVISION = 0;
 	const int REVISION_VERSION = 0;
-	const int VERSION_BUILD = 42;
-	const int BUILD_VERSION = 42;
-	const char VERSION[50] = "0.1.0 Build 42";
-	const char makeinfo[100] = "Made from DA's IRC library 0.1.0 Build 42";
+	const int VERSION_BUILD = 43;
+	const int BUILD_VERSION = 43;
+	const char VERSION[50] = "0.1.0 Build 43";
+	const char makeinfo[100] = "Made from DA's IRC library 0.1.0 Build 43";
 };
 }
 
