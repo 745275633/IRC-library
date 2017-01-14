@@ -7,17 +7,16 @@
 #ifndef DA_IRC_CONSTRUCTOR_HPP
 #define DA_IRC_CONSTRUCTOR_HPP
 
-#include <irc/main.hpp>
-#include <boost/make_shared.hpp>
 #include <iostream>
+#include <memory>
 
 namespace DA
 {
 
 irc::irc()
 {
-	sock = boost::make_shared<boost::asio::ip::tcp::socket>(ioser);
-	version = boost::make_shared<version_b>();
+	sock = std::make_shared<boost::asio::ip::tcp::socket>(ioser);
+	version = std::make_shared<version_b>();
 	std::cout << version->makeinfo << std::endl;
 }
 
@@ -29,7 +28,6 @@ irc::~irc()
 
 irc::irc(std::string name, std::string port): irc()
 {
-	//sock = boost::make_shared<boost::asio::ip::tcp::socket>(ioser);
 	boost::system::error_code ec;
 	resolv_connec_v2(name, port, ec);
 	DA_IRC_THROW_ERROR(ec);
@@ -37,17 +35,13 @@ irc::irc(std::string name, std::string port): irc()
 
 irc::irc(std::string name, std::string port, boost::system::error_code &ec): irc()
 {
-	//sock = boost::make_shared<boost::asio::ip::tcp::socket>(ioser);
 	resolv_connec_v2(name, port, ec);
 }
 
 irc::irc(std::string name, std::string port, std::string username, std::string hostname,
          std::string servername, std::string realname): irc(name, port)
 {
-	//sock = boost::make_shared<boost::asio::ip::tcp::socket>(ioser);
 	boost::system::error_code ec;
-	//resolv_connec_v2(name, port, ec);
-	//DA_IRC_THROW_ERROR(ec);
 	user(username, hostname, servername, realname, ec);
 	DA_IRC_THROW_ERROR(ec);
 	nick(username, ec);
@@ -57,9 +51,6 @@ irc::irc(std::string name, std::string port, std::string username, std::string h
 irc::irc(std::string name, std::string port, std::string username, std::string hostname,
          std::string servername, std::string realname, boost::system::error_code &ec): irc(name, port, ec)
 {
-	//sock = boost::make_shared<boost::asio::ip::tcp::socket>(ioser);
-
-	//resolv_connec_v2(name, port, ec);
 	if (ec) return;
 
 	user(username, hostname, servername, realname, ec);

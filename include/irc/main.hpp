@@ -7,13 +7,13 @@
 #ifndef DA_IRC_MAIN_HPP
 #define DA_IRC_MAIN_HPP
 
-#include <boost/smart_ptr.hpp>
 #include <boost/asio.hpp>
 #include <boost/system/error_code.hpp>
 #include <boost/thread.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/throw_exception.hpp>
 #include <string>
+#include <memory>
 
 #define DA_IRC_THROW_ERROR(err) \
 	if (err)\
@@ -29,8 +29,10 @@ class irc : boost::noncopyable
 {
 protected:
 
+	typedef boost::asio::ip::tcp::socket sock_type;
+	typedef std::shared_ptr<sock_type> point_to_sock_type;
 	boost::asio::io_service ioser;
-	boost::shared_ptr<boost::asio::ip::tcp::socket> sock;
+	point_to_sock_type sock;
 
 	/**
 	 * \brief （这是 protected 的）此函数用于把网址转换给 boost::asio::ip::tcp::socket::connect 函数使用。
@@ -72,7 +74,7 @@ public:
 	 */
 	class version_b;
 	
-	boost::shared_ptr<version_b> version;
+	std::shared_ptr<version_b> version;
 
 	/**
 	 * \brief 这个缺省构造函数只进行初始化。
@@ -479,7 +481,7 @@ public:
 	 * \par Example
 	 * \code
 	 * boost::system::error_code ec;
-	 * string msg;
+	 * std::string msg;
 	 * DA::irc::receive(msg);
 	 * if (ec)
 	 * {
@@ -639,4 +641,11 @@ public:
 }
 
 #endif
+
+#include <irc/connect.hpp>
+#include <irc/version.hpp>
+#include <irc/constructor.hpp>
+#include <irc/operator.hpp>
+#include <irc/command.hpp>
+#include <irc/perform.hpp>
 

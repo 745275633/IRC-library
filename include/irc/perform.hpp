@@ -7,36 +7,26 @@
 #ifndef DA_IRC_PERFORM_HPP
 #define DA_IRC_PERFORM_HPP
 
-#include <irc/main.hpp>
-
 namespace DA
 {
 std::string irc::send(std::string message)
 {
-	if (is_connect)
-	{
-		boost::system::error_code ec;
-		sock->write_some(boost::asio::buffer(message + "\r\n"), ec);
-		DA_IRC_THROW_ERROR(ec);
-		return (message + "\n");
-	}
-	else
-	{
+	if (!is_connect)
 		return "";
-	}
+
+	boost::system::error_code ec;
+	sock->write_some(boost::asio::buffer(message + "\r\n"), ec);
+	DA_IRC_THROW_ERROR(ec);
+	return (message + "\n");
 }
 
 std::string irc::send(std::string message, boost::system::error_code &ec)
 {
-	if (is_connect)
-	{
-		sock->write_some(boost::asio::buffer(message + "\r\n"), ec);
-		return (message + "\n");
-	}
-	else
-	{
+	if (!is_connect)
 		return "";
-	}
+
+	sock->write_some(boost::asio::buffer(message + "\r\n"), ec);
+	return (message + "\n");
 }
 
 std::string irc::receive()

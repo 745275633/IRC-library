@@ -7,20 +7,17 @@
 #ifndef DA_IRC_CONNECT_HPP
 #define DA_IRC_CONNECT_HPP
 
-#include <irc/main.hpp>
-
 namespace DA
 {
 
 void irc::resolv_connect(std::string name, std::string port)
 {
-	boost::asio::ip::tcp::resolver rlv(ioser);
-	boost::asio::ip::tcp::resolver::query qry(name, port);
-	boost::asio::ip::tcp::resolver::iterator iter = rlv.resolve(qry);
-	boost::asio::ip::tcp::resolver::iterator end;
+	using boost::asio::ip::tcp::resolver;
+	resolver rlv(ioser);
+	resolver::query qry(name, port);
 	boost::system::error_code ec = boost::asio::error::host_not_found;
 
-	for (; ec && iter != end; ++iter)
+	for (resolver::iterator it = rlv.resolve(qry), resolver::iterator end; ec && iter != end; ++iter)
 	{
 		sock->close();
 		sock->connect(*iter, ec);
@@ -33,23 +30,18 @@ void irc::resolv_connect(std::string name, std::string port)
 boost::system::error_code irc::resolv_connect(std::string name, std::string port,
         boost::system::error_code &ec)
 {
-	boost::asio::ip::tcp::resolver rlv(ioser);
-	boost::asio::ip::tcp::resolver::query qry(name, port);
-	boost::asio::ip::tcp::resolver::iterator iter = rlv.resolve(qry);
-	boost::asio::ip::tcp::resolver::iterator end;
-	boost::system::error_code er = boost::asio::error::host_not_found;
+	using boost::asio::ip::tcp::resolver;
+	resolver rlv(ioser);
+	resolver::query qry(name, port);
+	boost::system::error_code ec = boost::asio::error::host_not_found;
 
-	for (; er && iter != end; ++iter)
+	for (resolver::iterator it = rlv.resolve(qry), resolver::iterator end; ec && iter != end; ++iter)
 	{
 		sock->close();
-		sock->connect(*iter, er);
+		sock->connect(*iter, ec);
 	}
 
-	if (er)
-	{
-		ec = er;
-	}
-	else
+	if (!ec)
 	{
 		is_connect = true;
 	}
