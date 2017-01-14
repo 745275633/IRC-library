@@ -12,15 +12,15 @@ namespace DA
 
 void irc::resolv_connect(std::string name, std::string port)
 {
-	using boost::asio::ip::tcp::resolver;
+	typedef boost::asio::ip::tcp::resolver resolver;
 	resolver rlv(ioser);
 	resolver::query qry(name, port);
 	boost::system::error_code ec = boost::asio::error::host_not_found;
 
-	for (resolver::iterator it = rlv.resolve(qry), resolver::iterator end; ec && iter != end; ++iter)
+	for (resolver::iterator it = rlv.resolve(qry), end; ec && it != end; ++it)
 	{
 		sock->close();
-		sock->connect(*iter, ec);
+		sock->connect(*it, ec);
 	}
 
 	DA_IRC_THROW_ERROR(ec);
@@ -30,15 +30,15 @@ void irc::resolv_connect(std::string name, std::string port)
 boost::system::error_code irc::resolv_connect(std::string name, std::string port,
         boost::system::error_code &ec)
 {
-	using boost::asio::ip::tcp::resolver;
+	typedef boost::asio::ip::tcp::resolver resolver;
 	resolver rlv(ioser);
 	resolver::query qry(name, port);
-	boost::system::error_code ec = boost::asio::error::host_not_found;
+	ec = boost::asio::error::host_not_found;
 
-	for (resolver::iterator it = rlv.resolve(qry), resolver::iterator end; ec && iter != end; ++iter)
+	for (resolver::iterator it = rlv.resolve(qry), end; ec && it != end; ++it)
 	{
 		sock->close();
-		sock->connect(*iter, ec);
+		sock->connect(*it, ec);
 	}
 
 	if (!ec)
