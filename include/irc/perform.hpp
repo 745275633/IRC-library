@@ -7,36 +7,26 @@
 #ifndef DA_IRC_PERFORM_HPP
 #define DA_IRC_PERFORM_HPP
 
-#include <irc/main.hpp>
-
 namespace DA
 {
 std::string irc::send(std::string message)
 {
-	if (is_connect)
-	{
-		boost::system::error_code ec;
-		sock->write_some(boost::asio::buffer(message + "\r\n"), ec);
-		DA_IRC_THROW_ERROR(ec);
-		return (message + "\n");
-	}
-	else
-	{
+	if (!is_connect)
 		return "";
-	}
+
+	boost::system::error_code ec;
+	sock->write_some(boost::asio::buffer(message + "\r\n"), ec);
+	DA_IRC_THROW_ERROR(ec);
+	return (message + "\n");
 }
 
 std::string irc::send(std::string message, boost::system::error_code &ec)
 {
-	if (is_connect)
-	{
-		sock->write_some(boost::asio::buffer(message + "\r\n"), ec);
-		return (message + "\n");
-	}
-	else
-	{
+	if (!is_connect)
 		return "";
-	}
+
+	sock->write_some(boost::asio::buffer(message + "\r\n"), ec);
+	return (message + "\n");
 }
 
 std::string irc::receive()
@@ -65,7 +55,7 @@ std::string irc::receive(std::string &message)
 	boost::system::error_code ec;
 	char tmp[520] = {0};
 	sock->read_some(boost::asio::buffer(tmp, 512), ec);
-	std::string msg = tmp;
+	message = tmp;
 	CRLF2LF(message);
 
 	if (ec)
@@ -77,7 +67,7 @@ std::string irc::receive(std::string &message, boost::system::error_code &ec)
 {
 	char tmp[520] = {0};
 	sock->read_some(boost::asio::buffer(tmp, 512), ec);
-	std::string msg = tmp;
+	message = tmp;
 	CRLF2LF(message);
 	return message;
 }
