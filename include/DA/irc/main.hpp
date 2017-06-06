@@ -737,10 +737,10 @@ public:
 
 #endif
 
-#include <irc/connect.hpp>
-#include <irc/version.hpp>
-#include <irc/constructor.hpp>
-#include <irc/operator.hpp>
-#include <irc/command.hpp>
-#include <irc/perform.hpp>
+#include "connect.hpp"
+#include "version.hpp"
+#include "constructor.hpp"
+#include "operator.hpp"
+#include "command.hpp"
+#include "perform.hpp"
 

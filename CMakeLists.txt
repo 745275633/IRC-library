@@ -17,7 +17,7 @@ else(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
 endif(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
 configure_file (
   "${PROJECT_SOURCE_DIR}/version.hpp.in"
-  "${PROJECT_SOURCE_DIR}/include/irc/version.hpp"
+  "${PROJECT_SOURCE_DIR}/include/DA/irc/version.hpp"
 )
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)

@@ -7,6 +7,6 @@
 #ifndef DA_IRC_HPP
 #define DA_IRC_HPP
 
-#include <irc/main.hpp>
+#include "irc/main.hpp"
 
 #endif
