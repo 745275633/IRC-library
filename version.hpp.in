@@ -20,8 +20,8 @@ public:
 	const int REVISION_VERSION = @revision_version@;
 	const int VERSION_BUILD = @build_version@;
 	const int BUILD_VERSION = @build_version@;
-	const char VERSION[50] = "@major_version@.@minor_version@.@revision_version@ Build @build_version@";
-	const char makeinfo[100] = "Made from DA's IRC library @major_version@.@minor_version@.@revision_version@ Build @build_version@";
+	const char VERSION[30] = "@major_version@.@minor_version@.@revision_version@ Build @build_version@";
+	const char makeinfo[60] = "Made by DA's IRC library @major_version@.@minor_version@.@revision_version@ Build @build_version@";
 };
 }
 

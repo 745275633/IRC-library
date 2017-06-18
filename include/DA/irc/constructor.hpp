@@ -17,12 +17,10 @@ irc::irc()
 {
 	sock = std::make_shared<boost::asio::ip::tcp::socket>(ioser);
 	version = std::make_shared<version_b>();
-	std::cout << version->makeinfo << std::endl;
 }
 
 irc::~irc()
 {
-	std::cout << version->makeinfo << std::endl;
 	quit();
 }
 
