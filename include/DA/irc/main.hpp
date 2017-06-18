@@ -63,6 +63,15 @@ protected:
 			str.replace(pos, 2, "\n");
 		}
 	}
+	inline static void rmNL(std::string &str)
+	{
+		std::string::size_type pos;
+
+		while ((pos = str.find("\n")) != std::string::npos)
+		{
+			str.replace(pos, 1, "\\n");
+		}
+	}
 
 public:
 	/**
@@ -177,7 +186,9 @@ public:
 	    std::string servername, std::string realname, boost::system::error_code &ec);
 
 	/**
-	 * \brief 初始化的同时还进行连接、发送 USER 指令、NICK 指令、JOIN指令。
+	 * \brief 已弃用，请分步
+	 *
+	 * 初始化的同时还进行连接、发送 USER 指令、NICK 指令、JOIN指令。
 	 *
 	 * USER指令是在连接开始建立后来详细说明用户的username，hostname，servername，realname的。USER指令也被server之间用来通信用来通告一个新的用户连接上了服务器，只有当client的USER和NICK指令抵达服务器后才完成了注册连接的步骤。
 	 * 一般情况下 hostname 和 servername 在服务器明确知道这是一个client发过来的USER指令的时候，他们都会被忽略。
@@ -185,6 +196,8 @@ public:
 	 * NICK 命令是用来给予用户一个昵称或者修改之前的昵称。如果一个 NICK 信息到达了一台已经存在一个这个昵称的服务器上，就会发生 nickname 冲突。
 	 *
 	 * JOIN指令是用来收听一个指定的频道时使用的。
+	 * 
+	 * \deprecated
 	 *
 	 * \param name 服务器地址。
 	 *
@@ -207,7 +220,9 @@ public:
 	    std::string servername, std::string realname, std::string channel);
 
 	/**
-	 * \brief 初始化的同时还进行连接、发送 USER 指令、NICK 指令、JOIN指令。
+	 * \brief 已弃用，请分步
+	 *
+	 * 初始化的同时还进行连接、发送 USER 指令、NICK 指令、JOIN指令。
 	 *
 	 * USER指令是在连接开始建立后来详细说明用户的username，hostname，servername，realname的。USER指令也被server之间用来通信用来通告一个新的用户连接上了服务器，只有当client的USER和NICK指令抵达服务器后才完成了注册连接的步骤。
 	 * 一般情况下 hostname 和 servername 在服务器明确知道这是一个client发过来的USER指令的时候，他们都会被忽略。
@@ -215,6 +230,8 @@ public:
 	 * NICK 命令是用来给予用户一个昵称或者修改之前的昵称。如果一个 NICK 信息到达了一台已经存在一个这个昵称的服务器上，就会发生 nickname 冲突。
 	 *
 	 * JOIN指令是用来收听一个指定的频道时使用的。
+	 * 
+	 * \deprecated
 	 *
 	 * \param name 服务器地址。
 	 *
@@ -238,7 +255,9 @@ public:
 	    boost::system::error_code &ec);
 
 	/**
-	 * \brief 初始化的同时还进行连接、发送 USER 指令、NICK 指令、JOIN指令。
+	 * \brief 已弃用，请分步
+	 *
+	 * 初始化的同时还进行连接、发送 USER 指令、NICK 指令、JOIN指令。
 	 *
 	 * USER指令是在连接开始建立后来详细说明用户的username，hostname，servername，realname的。USER指令也被server之间用来通信用来通告一个新的用户连接上了服务器，只有当client的USER和NICK指令抵达服务器后才完成了注册连接的步骤。
 	 * 一般情况下 hostname 和 servername 在服务器明确知道这是一个client发过来的USER指令的时候，他们都会被忽略。
@@ -246,6 +265,8 @@ public:
 	 * NICK 命令是用来给予用户一个昵称或者修改之前的昵称。如果一个 NICK 信息到达了一台已经存在一个这个昵称的服务器上，就会发生 nickname 冲突。
 	 *
 	 * JOIN指令是用来收听一个指定的频道时使用的。
+	 * 
+	 * \deprecated
 	 *
 	 * \param name 服务器地址。
 	 *
@@ -271,7 +292,9 @@ public:
 	    std::string key);
 
 	/**
-	 * \brief 初始化的同时还进行连接、发送 USER 指令、NICK 指令、JOIN指令。
+	 * \brief 已弃用，请分步
+	 *
+	 * 初始化的同时还进行连接、发送 USER 指令、NICK 指令、JOIN指令。
 	 *
 	 * USER指令是在连接开始建立后来详细说明用户的username，hostname，servername，realname的。USER指令也被server之间用来通信用来通告一个新的用户连接上了服务器，只有当client的USER和NICK指令抵达服务器后才完成了注册连接的步骤。
 	 * 一般情况下 hostname 和 servername 在服务器明确知道这是一个client发过来的USER指令的时候，他们都会被忽略。
@@ -279,6 +302,8 @@ public:
 	 * NICK 命令是用来给予用户一个昵称或者修改之前的昵称。如果一个 NICK 信息到达了一台已经存在一个这个昵称的服务器上，就会发生 nickname 冲突。
 	 *
 	 * JOIN指令是用来收听一个指定的频道时使用的。
+	 *
+	 * \deprecated
 	 *
 	 * \param name 服务器地址。
 	 *
@@ -438,7 +463,8 @@ public:
 	 *
 	 * \par Example
 	 * \code
-	 * string  msg = DA::irc::receive();
+	 * DA::irc irc;
+	 * string  msg = irc.receive();
 	 * \endcode
 	 */
 	std::string receive();
@@ -453,7 +479,8 @@ public:
 	 * \par Example
 	 * \code
 	 * boost::system::error_code ec;
-	 * string  msg = DA::irc::receive();
+	 * DA::irc irc;
+	 * string  msg = irc.receive();
 	 * if (ec)
 	 * {
 	 *   // 一个错误发生。
@@ -473,8 +500,9 @@ public:
 	 *
 	 * \par Example
 	 * \code
+	 * DA::irc irc;
 	 * string msg;
-	 * DA::irc::receive(msg);
+	 * irc.receive(msg);
 	 * \endcode
 	 */
 	std::string receive(std::string &message);
@@ -491,8 +519,9 @@ public:
 	 * \par Example
 	 * \code
 	 * boost::system::error_code ec;
+	 * DA::irc irc;
 	 * std::string msg;
-	 * DA::irc::receive(msg);
+	 * irc.receive(msg);
 	 * if (ec)
 	 * {
 	 *   // 一个错误发生。

@@ -15,6 +15,7 @@ std::string irc::send(std::string message)
 		return "";
 
 	boost::system::error_code ec;
+	rmNL(message);
 	sock->write_some(boost::asio::buffer(message + "\r\n"), ec);
 	DA_IRC_THROW_ERROR(ec);
 	return (message + "\n");
@@ -25,6 +26,7 @@ std::string irc::send(std::string message, boost::system::error_code &ec)
 	if (!is_connect)
 		return "";
 
+	rmNL(message);
 	sock->write_some(boost::asio::buffer(message + "\r\n"), ec);
 	return (message + "\n");
 }
