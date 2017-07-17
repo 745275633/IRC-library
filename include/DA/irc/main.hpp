@@ -79,12 +79,7 @@ public:
 	 */
 	bool is_connect = false;
 
-	/**
-	 * \brief irc 库的版本信息。
-	 */
-	class version_b;
-
-	std::shared_ptr<version_b> version;
+	#include "version.hpp"
 
 	/**
 	 * \brief 这个缺省构造函数只进行初始化。
@@ -535,7 +530,7 @@ public:
 	 *
 	 * 一个客户端的会话可以通过一个 QUIT 指令来终结。服务器必须在收到 client 的 QUIT 指令后关闭这个 client 的连接。
 	 *
-	 * \param ec 表明发生了什么错误，如果有。
+	 * \throws boost::system::system_error 抛出错误。
 	 *
 	 * \return 返回发送的命令。
 	 */
@@ -546,7 +541,7 @@ public:
 	 *
 	 * 一个客户端的会话可以通过一个 QUIT 指令来终结。服务器必须在收到 client 的 QUIT 指令后关闭这个 client 的连接。
 	 *
-	 * \throws boost::system::system_error 抛出错误。
+	 * \param ec 表明发生了什么错误，如果有。
 	 *
 	 * \return 返回发送的命令。
 	 */
@@ -767,7 +762,6 @@ public:
 #endif
 
 #include "connect.hpp"
-#include "version.hpp"
 #include "constructor.hpp"
 #include "operator.hpp"
 #include "command.hpp"

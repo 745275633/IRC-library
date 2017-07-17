@@ -2,10 +2,10 @@
 #include <iostream>
 
 int main()
-
 try
 {
 	DA::irc bot;
+	std::cout << bot.version.makeinfo << std::endl;
 }
 catch (std::exception &e)
 {

@@ -7,9 +7,10 @@
 #ifndef DA_IRC_VERSION_HPP
 #define DA_IRC_VERSION_HPP
 
-namespace DA
-{
-class irc::version_b
+/**
+ * \brief irc 库的版本信息。
+ */
+class version
 {
 public:
 	const int VERSION_MAJOR = @major_version@;
@@ -18,11 +19,8 @@ public:
 	const int MINOR_VERSION = @minor_version@;
 	const int VERSION_REVISION = @revision_version@;
 	const int REVISION_VERSION = @revision_version@;
-	const int VERSION_BUILD = @build_version@;
-	const int BUILD_VERSION = @build_version@;
-	const char VERSION[30] = "@major_version@.@minor_version@.@revision_version@ Build @build_version@";
-	const char makeinfo[60] = "Made by DA's IRC library @major_version@.@minor_version@.@revision_version@ Build @build_version@";
-};
-}
+	const char VERSION[10] = "@major_version@.@minor_version@.@revision_version@";
+	const char makeinfo[35] = "Made by DA's IRC library @major_version@.@minor_version@.@revision_version@";
+}version;
 
 #endif
