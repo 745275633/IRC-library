@@ -215,7 +215,7 @@ public:
 	 *
 	 * \throws boost::system::system_error 抛出错误。
 	 */
-	irc(std::string name, std::string port, std::string username,
+	[[deprecated]] irc(std::string name, std::string port, std::string username,
 	    std::string hostname,
 	    std::string servername, std::string realname, std::string channel);
 
@@ -249,7 +249,7 @@ public:
 	 *
 	 * \param ec 表明发生了什么错误，如果有。
 	 */
-	irc(std::string name, std::string port, std::string username,
+	[[deprecated]] irc(std::string name, std::string port, std::string username,
 	    std::string hostname,
 	    std::string servername, std::string realname, std::string channel,
 	    boost::system::error_code &ec);
@@ -286,7 +286,7 @@ public:
 	 *
 	 * \throws boost::system::system_error 抛出错误。
 	 */
-	irc(std::string name, std::string port, std::string username,
+	[[deprecated]] irc(std::string name, std::string port, std::string username,
 	    std::string hostname,
 	    std::string servername, std::string realname, std::string channel,
 	    std::string key);
@@ -323,7 +323,7 @@ public:
 	 *
 	 * \param ec 表明发生了什么错误，如果有。
 	 */
-	irc(std::string name, std::string port, std::string username,
+	[[deprecated]] irc(std::string name, std::string port, std::string username,
 	    std::string hostname,
 	    std::string servername, std::string realname, std::string channel,
 	    std::string key,
@@ -347,7 +347,7 @@ public:
 	 * resolv_connect("irc.freenode.net", "6667");
 	 * \endcode
 	 */
-	void resolv_connect(std::string name, std::string port);
+	[[deprecated("use resolv_connec_v2")]] void resolv_connect(std::string name, std::string port);
 
 	/**
 	 * \brief 已弃用，请使用 resolv_connec_v2
@@ -374,7 +374,7 @@ public:
 	 * }
 	 * \endcode
 	 */
-	boost::system::error_code resolv_connect(std::string name, std::string port,
+	[[deprecated("use resolv_connec_v2")]] boost::system::error_code resolv_connect(std::string name, std::string port,
 	        boost::system::error_code &ec);
 
 	/**
@@ -467,7 +467,7 @@ public:
 	 * string  msg = irc.receive();
 	 * \endcode
 	 */
-	std::string receive();
+	[[nodiscard]] std::string receive();
 
 	/**
 	 * \brief 此函数用于接收服务器发送的信息。
@@ -487,7 +487,7 @@ public:
 	 * }
 	 * \endcode
 	 */
-	std::string receive(boost::system::error_code &ec);
+	[[nodiscard]] std::string receive(boost::system::error_code &ec);
 
 	/**
 	 * \brief 此函数用于接收服务器发送的信息。
